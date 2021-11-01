@@ -1,3 +1,42 @@
+// Project State Mgmt class HERE
+// items will be listed here whenever add project button is clicked
+class ProjectState {
+    private listeners: any[] = [];
+    private projects: any[] = [];
+    private static instance: ProjectState;
+
+    private constructor() {
+
+    }
+// adding a static method to check if the instance exists and if it does... return it 
+    static getInstance() {
+        if (this.instance) {
+            return this.instance;
+        }
+        this.instance = new ProjectState();
+        return this.instance;
+    }
+
+    addListener(listenerFn: Function) {
+        this.listeners.push(listenerFn);
+    }
+    
+    addProject(title: string, description: string, numOfPeople: number) {
+        const newProject = {
+            id: Math.random().toString(),
+            title: title,
+            description: description,
+            people: numOfPeople
+        };
+        this.projects.push(newProject);
+        for (const listenerFn of this.listeners) {
+            listenerFn(this.projects.slice());
+        }
+    }
+}
+
+const projectState = ProjectState.getInstance();
+
 // Validation logic 
 interface Validatable {
     value: string | number;
@@ -39,8 +78,8 @@ function validate(validatableInput: Validatable) {
 
 //adding the autobind decorator so we don't need to use the bind keyword
 function autobind(
-    target: any, 
-    methodName: string, 
+    _: any, 
+    _2: string, 
     descriptor: PropertyDescriptor
     ) {
         const originalMethod = descriptor.value;
@@ -59,12 +98,14 @@ class ProjectList {
     templateElement: HTMLTemplateElement;
     hostElement: HTMLDivElement;
     element: HTMLElement;
+    assignedProjects: any[];
     //rendering part of the html template by accessing all of the core pieces here
     constructor(private type: 'active' | 'finished') {
         this.templateElement = document.getElementById(
             'project-list'
         )! as HTMLTemplateElement;
         this.hostElement = document.getElementById('app')! as HTMLDivElement;
+        this.assignedProjects = [];
         
         const importedNode = document.importNode(
             this.templateElement.content, 
@@ -72,8 +113,23 @@ class ProjectList {
         );
         this.element = importedNode.firstElementChild as HTMLElement;
         this.element.id = `${this.type}-projects`;
+
+        projectState.addListener((projects: any[]) => {
+            this.assignedProjects = projects;
+            this.renderProjects();
+        });
+
         this.attach();
         this.renderContent();
+    }
+
+    private renderProjects() {
+        const listEl = document.getElementById(`${this.type}-projects-list`)! as HTMLUListElement;
+        for (const prjItem of this.assignedProjects) {
+            const listItem = document.createElement('li');
+            listItem.textContent = prjItem.title;
+            listEl.appendChild(listItem)
+        }
     }
 
     private renderContent() {
@@ -95,14 +151,14 @@ class ProjectInput {
     descriptionInputElement: HTMLInputElement;
     peopleInputElement: HTMLInputElement;
 
-
-
     constructor() {
         this.templateElement = document.getElementById('project-input')! as HTMLTemplateElement;
         this.hostElement = document.getElementById('app')! as HTMLDivElement;
 
         // rendering a form that belongs to this instance
-        const importedNode = document.importNode(this.templateElement.content, true);
+        const importedNode = document.importNode(this.templateElement.content, 
+            true
+        );
         // storing the html element here
         this.element = importedNode.firstElementChild as HTMLFormElement;
         //this line updates the form styling
@@ -116,6 +172,7 @@ class ProjectInput {
         this.configure();
         this.attach();
     }
+
     private gatherUserInput(): [string, string, number] | void {
         const enteredTitle = this.titleInputElement.value;
         const enteredDescription = this.descriptionInputElement.value;
@@ -178,6 +235,6 @@ class ProjectInput {
     }
 }
 // rendering the form through this line
-const hereInput = new ProjectInput();
+const prjInput = new ProjectInput();
 const activeLists = new ProjectList('active');
 const finishedLists = new ProjectList('finished');
