@@ -153,7 +153,7 @@ class ProjectInput {
         const userInput = this.gatherUserInput();
         if (Array.isArray(userInput)) {
             const [title, desc, people] = userInput;
-            console.log(title, desc, people);
+            projectState.addProject(title, desc, people);
             this.clearInputs();
         }
     }
@@ -168,6 +168,6 @@ __decorate([
     autobind
 ], ProjectInput.prototype, "submitHandler", null);
 const prjInput = new ProjectInput();
-const activeLists = new ProjectList('active');
-const finishedLists = new ProjectList('finished');
+const activePrjLists = new ProjectList('active');
+const finishedPrjLists = new ProjectList('finished');
 //# sourceMappingURL=app.js.map
