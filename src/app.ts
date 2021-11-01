@@ -1,3 +1,42 @@
+// Validation logic 
+interface Validatable {
+    value: string | number;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+}
+// if the required check is flagged, we check is the value is empty etc.
+function validate(validatableInput: Validatable) {
+    let isValid = true;
+    if (validatableInput.required) {
+        isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+    }
+    if (
+        validatableInput.minLength != null && 
+        typeof validatableInput.value === 'string'
+        ) {
+        isValid = 
+        isValid && validatableInput.value.length > validatableInput.minLength;
+    }
+    if (
+        validatableInput.maxLength != null &&
+        typeof validatableInput.value === 'string'
+    ) {
+        isValid = 
+        isValid && validatableInput.value.length < validatableInput.maxLength;
+    }
+    //checking the final min/max variables of the interface
+    if (validatableInput.min != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value > validatableInput.min;
+    }
+    if (validatableInput.max != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value < validatableInput.max;
+    }
+    return isValid;
+}
+
 //adding the autobind decorator so we don't need to use the bind keyword
 function autobind(
     target: any, 
@@ -48,10 +87,30 @@ class ProjectInput {
         const enteredTitle = this.titleInputElement.value;
         const enteredDescription = this.descriptionInputElement.value;
         const enteredPeople = this.peopleInputElement.value;
+
+        const titleValidatable: Validatable = {
+            value: enteredTitle,
+            required: true
+        };
+
+        const descriptionValidatable: Validatable = {
+            value: enteredDescription,
+            required: true,
+            minLength: 5
+        };
+
+        const peopleValidatable: Validatable = {
+            value: +enteredPeople,
+            required: true,
+            min: 1,
+            max: 5
+        };
 // if all these conditions are satisfied, then continue
+// revised to have a validation function that is resusable
         if (
-            enteredTitle.trim().length === 0 || enteredDescription.trim().length === 0 || 
-            enteredPeople.trim().length === 0
+            !validate(titleValidatable) ||
+            !validate(descriptionValidatable) ||
+            !validate(peopleValidatable)
         ) {
             alert('Invalid input, please try again!');
             return;
