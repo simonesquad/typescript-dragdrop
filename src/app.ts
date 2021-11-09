@@ -1,20 +1,10 @@
+/// <reference path="d-d-interfaces.ts" />
+/// <reference path="project-model.ts" />
 
+namespace App {
+    // Project Type
 
 // Project Type
-enum ProjectStatus { 
-    Active, 
-    Finished
-}
-
-class Project {
-    constructor(
-        public id: string, 
-        public title: string, 
-        public description: string, 
-        public people: number, 
-        public status: ProjectStatus
-    ) {}
-}
 
 // Project State Mgmt class HERE
 // items will be listed here whenever add project button is clicked
@@ -357,6 +347,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     }
 }
 // rendering the form through this line
-const prjInput = new ProjectInput();
-const activePrjLists = new ProjectList('active');
-const finishedPrjLists = new ProjectList('finished');
+new ProjectInput();
+new ProjectList('active');
+new ProjectList('finished');
+}
