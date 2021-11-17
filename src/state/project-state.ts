@@ -1,6 +1,3 @@
-namespace App {
-// Project State Mgmt class HERE
-// items will be listed here whenever add project button is clicked
 type Listener<T> = (items: Project[]) => void;
 
 class State<T> {
@@ -58,4 +55,3 @@ export class ProjectState extends State<Project> {
 }
 
 export const projectState = ProjectState.getInstance();
-}
