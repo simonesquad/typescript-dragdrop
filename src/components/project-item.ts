@@ -1,6 +1,6 @@
 import { Draggable } from '../models/d-d-interfaces.js';
 import { Project } from '../models/project-model.js';
-import { Component } from './base-component.js';
+import Component from './base-component.js';
 import { autobind } from '../decorators/autobind-decorator.js';
 
     //Project Item Class

@@ -1,6 +1,6 @@
 import { DragTarget } from '../models/d-d-interfaces.js';
 import { Project, ProjectStatus } from '../models/project-model.js';
-import { Component } from './base-component.js';
+import Component from './base-component.js';
 import { autobind } from '../decorators/autobind-decorator.js';
 import { projectState } from '../state/project-state.js';
 import { ProjectItem } from './project-item.js';
