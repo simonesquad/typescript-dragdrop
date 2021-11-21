@@ -1,7 +1,7 @@
-import { Draggable } from '../models/d-d-interfaces.js';
-import { Project } from '../models/project-model.js';
-import Component from './base-component.js';
-import { autobind } from '../decorators/autobind-decorator.js';
+import { Draggable } from '../models/d-d-interfaces';
+import { Project } from '../models/project-model';
+import Component from './base-component';
+import { autobind } from '../decorators/autobind-decorator';
 
     //Project Item Class
 export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement>
@@ -30,7 +30,7 @@ dragStartHandler(event: DragEvent) {
     event.dataTransfer!.effectAllowed = 'move';
 }
 
-dragEndHandler(event: DragEvent) {
+dragEndHandler(_: DragEvent) {
     console.log('DragEnd');
 }
 
