@@ -30,7 +30,7 @@ dragStartHandler(event: DragEvent) {
     event.dataTransfer!.effectAllowed = 'move';
 }
 
-dragEndHandler(event: DragEvent) {
+dragEndHandler(_: DragEvent) {
     console.log('DragEnd');
 }
 

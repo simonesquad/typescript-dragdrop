@@ -1,6 +1,6 @@
 import { Project, ProjectStatus } from '../models/project-model';
 
-type Listener<T> = (items: Project[]) => void;
+type Listener<T> = (items: T[]) => void;
 
 class State<T> {
     protected listeners: Listener<T>[] = [];
